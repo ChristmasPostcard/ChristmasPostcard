@@ -1,0 +1,88 @@
+1.Вывести студентов, которые сдавали дисциплину «Основы баз данных», указать дату попытки и результат. Информацию вывести по убыванию результатов тестирования.
+
+SELECT  name_student
+       ,date_attempt
+       ,result
+FROM attempt
+    JOIN student
+    ON student.student_id = attempt.student_id
+    JOIN subject
+    ON subject.subject_id = attempt.subject_id
+WHERE subject.name_subject = 'Основы баз данных'
+ORDER BY result DESC
+
+2.По таблице Orders найти количество заказов, сделанных каждым продавцом. Заказ для указанного продавца – это любая запись в таблице Orders, где в колонке EmployeeID задано значение для данного продавца. В результатах запроса надо высвечивать колонку с именем продавца (Должно высвечиваться имя полученное конкатенацией LastName & FirstName. Эта строка LastName & FirstName должна быть получена отдельным запросом в колонке основного запроса. Также основной запрос должен использовать группировку по EmployeeID.) с названием колонки ‘Seller’ и колонку c количеством заказов высвечивать с названием 'Amount'. Результаты запроса должны быть упорядочены по убыванию количества заказов.
+
+SELECT  CONCAT(LastName,FirstName) AS 'Seller'
+FROM Employees
+SELECT  COUNT (EmployeeID) AS Amount
+FROM Orders
+GROUP BY  EmployeeID
+ORDER BY  Amount DESC
+
+3.Найти покупателей и продавцов, которые живут в одном городе. Если в городе живут только один или несколько продавцов или только один или несколько покупателей, то информация о таких покупателя и продавцах не должна попадать в результирующий набор. Не использовать конструкцию JOIN. В результатах запроса необходимо вывести следующие заголовки для результатов запроса: ‘Person’, ‘Type’ (здесь надо выводить строку ‘Customer’ или  ‘Seller’ в завимости от типа записи), ‘City’. Отсортировать результаты запроса по колонке ‘City’.
+
+SELECT City
+FROM Employees
+GROUP BY City
+HAVING COUNT(City)>2
+ORDER BY City
+
+4.Вывести информацию о книгах (жанр, книга, автор), относящихся к жанру, включающему слово «роман» в отсортированном по названиям книг виде.
+
+SELECT  name_genre
+       ,title
+       ,name_author
+FROM book
+    JOIN genre
+    ON book.genre_id = genre.genre_id
+    JOIN author
+    ON book.author_id = author.author_id
+WHERE name_genre LIKE "Роман"
+ORDER BY title
+
+5.Необходимо в каждом городе провести выставку книг каждого автора в течение 2020 года. Дату проведения выставки выбрать случайным образом. Создать запрос, который выведет город, автора и дату проведения выставки. Последний столбец назвать Дата. Информацию вывести, отсортировав сначала в алфавитном порядке по названиям городов, а потом по убыванию дат проведения выставок.
+
+SELECT  name_city
+       ,name_author
+       ,DATE_ADD("2020-01-01",INTERVAL FLOOR(RAND() * 365) DAY) AS Дата
+FROM city
+CROSS JOIN author
+ORDER BY name_city, Дата DESC
+
+6.Вывести все жанры, которые не представлены в книгах на складе.
+
+SELECT name_genre
+FROM genre
+    LEFT JOIN book
+    ON genre.genre_id = book.genre_id
+WHERE title IS NULL
+
+7.В таблице Products найти все продукты (колонка ProductName), где встречается подстрока 'chocolade'. Известно, что в подстроке 'chocolade' 
+ может быть изменена одна буква 'c' в середине - найти все продукты, которые удовлетворяют этому условию. Подсказка: результаты запроса должны высвечивать 2 строки.
+ 
+ SELECT ProductName
+ FROM Products
+ WHERE ProductName LIKE '%cho_olade%'
+
+8. В таблице Products найти все продукты (колонка ProductName), где встречается двойное t ('tt').
+
+ SELECT ProductName
+ FROM Products
+ WHERE ProductName LIKE '%tt%'
+
+9.Выбрать все заказы (OrderID) из таблицы Order Details (заказы не должны повторяться),
+где встречаются продукты с количеством от 3 до 10 включительно – это колонка Quantity в таблице Order Details. Использовать оператор BETWEEN. Запрос должен высвечивать только колонку OrderID.
+
+SELECT DISTINCT OrderID
+FROM [Order Details]
+WHERE Quantity BETWEEN 3 and 10
+
+10. Вывести два города, в которых чаще всего были в командировках сотрудники. Вычисляемый столбец назвать Количество.
+
+SELECT  city
+       ,COUNT(city) AS Количество
+FROM trip
+GROUP BY  city
+ORDER BY  Количество DESC
+LIMIT 2
