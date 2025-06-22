@@ -1,4 +1,4 @@
-<img src="https://github.com/ChristmasPostcard/ChristmasPostcard/blob/main/images/autumn_leaves.jpg" alt="The Unlimited" width="180"/>
+<img src="https://github.com/ChristmasPostcard/ChristmasPostcard/blob/main/images/pictest.png" alt="The Unlimited" />
 ## Hi there 👋
 
 <!--
